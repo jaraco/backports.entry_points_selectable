@@ -7,7 +7,7 @@ Welcome to |project| documentation!
    history
 
 
-.. automodule:: skeleton
+.. automodule:: backports.entry_points_selectable
     :members:
     :undoc-members:
     :show-inheritance:
