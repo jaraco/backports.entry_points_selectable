@@ -1,7 +1,8 @@
 """
 >>> hasattr(entry_points(), 'select')
 True
->>> res = entry_points(group='console_scripts')
+>>> entry_points(group='console_scripts')
+(...)
 """
 
 import collections
@@ -9,6 +10,7 @@ import textwrap
 import itertools
 import operator
 import functools
+import contextlib
 
 try:
     from itertools import filterfalse  # type: ignore
@@ -123,6 +125,13 @@ class Sectioned:
         return line and not line.startswith('#')
 
 
+def compat_matches(ep, **params):
+    with contextlib.suppress(AttributeError):
+        return ep.matches(**params)
+    attrs = (getattr(ep, param) for param in params)
+    return all(map(operator.eq, params.values(), attrs))
+
+
 class EntryPoints(tuple):
     """
     An immutable collection of selectable EntryPoint objects.
@@ -144,7 +153,7 @@ class EntryPoints(tuple):
         Select entry points from self that match the
         given parameters (typically group and/or name).
         """
-        return EntryPoints(ep for ep in self if ep.matches(**params))
+        return EntryPoints(ep for ep in self if compat_matches(ep, **params))
 
     @property
     def names(self):

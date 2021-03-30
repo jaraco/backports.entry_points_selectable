@@ -1,3 +1,9 @@
+v1.0.2
+======
+
+#1: Fix AttributeError when ``EntryPoint`` does not yet implement
+``matches``.
+
 v1.0.1
 ======
 
