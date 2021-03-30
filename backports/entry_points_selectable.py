@@ -1,6 +1,7 @@
 """
 >>> hasattr(entry_points(), 'select')
 True
+>>> res = entry_points(group='console_scripts')
 """
 
 import collections
