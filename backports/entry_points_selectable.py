@@ -21,13 +21,13 @@ try:
 
     if not hasattr(metadata, 'EntryPoints'):
         raise ImportError("package without EntryPoints")
-    from importlib_metadata import distributions, EntryPoint
+    from importlib_metadata import distributions, EntryPoint  # type: ignore
 except ImportError:
     try:
         import importlib.metadata as metadata  # type: ignore
-        from importlib.metadata import distributions, EntryPoint
+        from importlib.metadata import distributions, EntryPoint  # type: ignore
     except ImportError:
-        from importlib_metadata import distributions, EntryPoint
+        from importlib_metadata import distributions, EntryPoint  # type: ignore
 
 
 __all__ = ['entry_points']
