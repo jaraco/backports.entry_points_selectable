@@ -1,3 +1,38 @@
+"""
+>>> hasattr(entry_points(), 'select')
+True
+"""
+
+import collections
+import textwrap
+import itertools
+import operator
+import functools
+
+try:
+    from itertools import filterfalse
+except ImportError:
+    from itertools import ifilterfalse as filterfalse
+
+
+try:
+    # prefer importlib_metadata if it has EntryPoints
+    import importlib_metadata as metadata
+
+    if not hasattr(metadata, 'EntryPoints'):
+        raise ImportError("package without EntryPoints")
+    from importlib_metadata import distributions, EntryPoint
+except ImportError:
+    try:
+        import importlib.metadata as metadata
+        from importlib.metadata import distributions, EntryPoint
+    except ImportError:
+        from importlib_metadata import distributions, EntryPoint
+
+
+__all__ = ['entry_points']
+
+
 def unique_everseen(iterable, key=None):
     "List unique elements, preserving order. Remember all elements ever seen."
     # unique_everseen('AAAABBBCCDAABBB') --> A B C D
@@ -144,7 +179,7 @@ class EntryPoints(tuple):
         )
 
 
-class SelectableGroups(Deprecated, dict):
+class SelectableGroups(dict):
     """
     A backward- and forward-compatible result from
     entry_points that fully implements the dict interface.
@@ -162,8 +197,7 @@ class SelectableGroups(Deprecated, dict):
         """
         Reconstruct a list of all entrypoints from the groups.
         """
-        groups = super(Deprecated, self).values()
-        return EntryPoints(itertools.chain.from_iterable(groups))
+        return EntryPoints(itertools.chain.from_iterable(self.values()))
 
     @property
     def groups(self):
@@ -184,7 +218,7 @@ class SelectableGroups(Deprecated, dict):
         return self._all.select(**params)
 
 
-def entry_points(**params) -> Union[EntryPoints, SelectableGroups]:
+def entry_points_compat(**params):
     """Return EntryPoint objects for all installed packages.
 
     Pass selection parameters (group or name) to filter the
@@ -201,8 +235,17 @@ def entry_points(**params) -> Union[EntryPoints, SelectableGroups]:
 
     :return: EntryPoints or SelectableGroups for all installed packages.
     """
-    unique = functools.partial(unique_everseen, key=operator.attrgetter('name'))
+
+    def dist_name(dist):
+        return dist.metadata['Name']
+
+    unique = functools.partial(unique_everseen, key=dist_name)
     eps = itertools.chain.from_iterable(
         dist.entry_points for dist in unique(distributions())
     )
     return SelectableGroups.load(eps).select(**params)
+
+
+entry_points = (
+    metadata.entry_points if hasattr(metadata, 'EntryPoints') else entry_points_compat
+)
