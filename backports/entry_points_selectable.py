@@ -10,21 +10,21 @@ import operator
 import functools
 
 try:
-    from itertools import filterfalse
+    from itertools import filterfalse  # type: ignore
 except ImportError:
-    from itertools import ifilterfalse as filterfalse
+    from itertools import ifilterfalse as filterfalse  # type: ignore
 
 
 try:
     # prefer importlib_metadata if it has EntryPoints
-    import importlib_metadata as metadata
+    import importlib_metadata as metadata  # type: ignore
 
     if not hasattr(metadata, 'EntryPoints'):
         raise ImportError("package without EntryPoints")
     from importlib_metadata import distributions, EntryPoint
 except ImportError:
     try:
-        import importlib.metadata as metadata
+        import importlib.metadata as metadata  # type: ignore
         from importlib.metadata import distributions, EntryPoint
     except ImportError:
         from importlib_metadata import distributions, EntryPoint
@@ -159,7 +159,7 @@ class EntryPoints(tuple):
 
         For coverage while SelectableGroups is present.
         >>> EntryPoints().groups
-        set()
+        set(...)
         """
         return set(ep.group for ep in self)
 
@@ -208,7 +208,7 @@ class SelectableGroups(dict):
         """
         for coverage:
         >>> SelectableGroups().names
-        set()
+        set(...)
         """
         return self._all.names
 
