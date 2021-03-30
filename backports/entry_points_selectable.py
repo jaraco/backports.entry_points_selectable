@@ -10,7 +10,6 @@ import textwrap
 import itertools
 import operator
 import functools
-import contextlib
 
 try:
     from itertools import filterfalse  # type: ignore
@@ -126,8 +125,10 @@ class Sectioned:
 
 
 def compat_matches(ep, **params):
-    with contextlib.suppress(AttributeError):
+    try:
         return ep.matches(**params)
+    except AttributeError:
+        pass
     attrs = (getattr(ep, param) for param in params)
     return all(map(operator.eq, params.values(), attrs))
 
