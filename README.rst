@@ -18,8 +18,11 @@
 ..    :target: https://skeleton.readthedocs.io/en/latest/?badge=latest
 
 
-Compatibility shim to ease adoption of
-`importlib_metadata 3.6 <https://importlib-metadata.readthedocs.io/en/latest/history.html#v3-6-0>`_. Avoids `deprecation warnings <https://github.com/python/importlib_metadata/issues/298>`_. Use this shim for libraries or applications invoking ``entry_points()`` that run on Python older than 3.10 or where importlib_metadata is older than 3.6. To use, add ``backports.entry_points_selectable`` to your project requirements. It will include ``importlib_metadata`` automatically where needed. Projects should still require ``importlib_metadata`` as appropriate for API uses other than ``entry_points``.
+Compatibility shim to ease adoption of `importlib_metadata 3.6 <https://importlib-metadata.readthedocs.io/en/latest/history.html#v3-6-0>`_. Supplies forward-compatibility of "selectable" entry points even on older versions of ``importlib_metadata`` and ``importlib.metadata``, and avoids usage that triggers `deprecation warnings <https://github.com/python/importlib_metadata/issues/298>`_.
+
+Use this shim for libraries or applications invoking ``entry_points()`` that run on Python older than 3.10 or where importlib_metadata is older than 3.6. In most cases, this shim is unnecessary and the easiest thing to do is simply require ``importlib_metadata >= 3.6`` on all Pythons (or only those prior to 3.10a7). In some environments, a library may be constrained on which versions of ``importlib_metadata`` can be required, so this library bridges that gap.
+
+To use this shim, add ``backports.entry_points_selectable`` to your project requirements. It will require ``importlib_metadata`` automatically where needed (prior to Python 3.8) but be satisfied by older versions. Projects should still require ``importlib_metadata`` as appropriate for API uses other than for ``entry_points``.
 
 Then in code, instead of ``from importlib.metadata import entry_points``, use::
 

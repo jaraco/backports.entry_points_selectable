@@ -1,3 +1,8 @@
+v1.0.3
+======
+
+Clarify docs in readme.
+
 v1.0.2
 ======
 
