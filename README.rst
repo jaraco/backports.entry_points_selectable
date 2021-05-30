@@ -31,3 +31,5 @@ Then in code, instead of ``from importlib.metadata import entry_points``, use::
     from backports.entry_points_selectable import entry_points
 
 And then use the "selectable" features (pass keyword arguments to ``entry_points`` or invoke ``.select()`` on the result).
+
+This backport has a very lenient dependency on `importlib_metadata` for older Pythons and is a single module implementation. If adding a dependency is a concern, this module may be vendored into the downstream project.
