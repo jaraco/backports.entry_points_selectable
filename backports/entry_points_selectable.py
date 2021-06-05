@@ -1,8 +1,17 @@
 """
 >>> hasattr(entry_points(), 'select')
 True
->>> entry_points(group='console_scripts')
+>>> tuple(entry_points(group='console_scripts'))
 (...)
+
+Some usage is deprecated and may emit deprecation warnings
+on later versions.
+
+>>> import warnings
+>>> warnings.filterwarnings('ignore', category=DeprecationWarning)
+
+>>> entry_points()['console_scripts'][0]
+EntryPoint(...)
 """
 
 import collections
@@ -133,7 +142,7 @@ def compat_matches(ep, **params):
     return all(map(operator.eq, params.values(), attrs))
 
 
-class EntryPoints(tuple):
+class EntryPoints(list):
     """
     An immutable collection of selectable EntryPoint objects.
     """
@@ -144,6 +153,8 @@ class EntryPoints(tuple):
         """
         Get the EntryPoint in self matching name.
         """
+        if isinstance(name, int):
+            return super().__getitem__(name)
         try:
             return next(iter(self.select(name=name)))
         except StopIteration:
@@ -257,6 +268,8 @@ def entry_points_compat(**params):
     return SelectableGroups.load(eps).select(**params)
 
 
-entry_points = (
-    metadata.entry_points if hasattr(metadata, 'EntryPoints') else entry_points_compat
+needs_backport = not hasattr(metadata, 'EntryPoints') or issubclass(
+    metadata.EntryPoints, tuple
 )
+
+entry_points = entry_points_compat if needs_backport else metadata.entry_points

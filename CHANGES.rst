@@ -1,3 +1,9 @@
+v1.1.0
+======
+
+Add compatibility support for access by index and EntryPoints
+mutability as introduced in importlib_metadata 4.4.
+
 v1.0.4
 ======
 
