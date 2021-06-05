@@ -11,7 +11,7 @@ on later versions.
 >>> warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 >>> entry_points()['console_scripts'][0]
-EntryPoint(...)
+EntryPoint...(...)
 """
 
 import collections
@@ -154,7 +154,7 @@ class EntryPoints(list):
         Get the EntryPoint in self matching name.
         """
         if isinstance(name, int):
-            return super().__getitem__(name)
+            return super(EntryPoints, self).__getitem__(name)
         try:
             return next(iter(self.select(name=name)))
         except StopIteration:
