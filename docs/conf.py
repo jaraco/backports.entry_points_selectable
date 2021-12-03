@@ -28,6 +28,11 @@ link_files = {
 # Be strict about any broken references:
 nitpicky = True
 
+nitpick_ignore = [
+    ('py:class', 'importlib_metadata.EntryPoints'),
+    ('py:class', 'importlib_metadata.SelectableGroups'),
+]
+
 # Include Python intersphinx mapping to prevent failures
 # jaraco/skeleton#51
 extensions += ['sphinx.ext.intersphinx']
