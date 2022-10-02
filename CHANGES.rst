@@ -1,3 +1,10 @@
+v1.2.0
+======
+
+Refreshed packaging.
+
+Require Python 3.7 or later.
+
 v1.1.1
 ======
 
