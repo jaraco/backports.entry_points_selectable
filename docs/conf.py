@@ -32,8 +32,8 @@ link_files = {
 nitpicky = True
 
 nitpick_ignore = [
-    ('py:class', 'importlib_metadata.EntryPoints'),
-    ('py:class', 'importlib_metadata.SelectableGroups'),
+    ('py:class', 'importlib.metadata.EntryPoints'),
+    ('py:class', 'importlib.metadata.SelectableGroups'),
 ]
 
 # Include Python intersphinx mapping to prevent failures
