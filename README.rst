@@ -3,7 +3,7 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/backports.entry_points_selectable.svg
 
-.. image:: https://github.com/jaraco/backports.entry_points_selectable/workflows/tests/badge.svg
+.. image:: https://github.com/jaraco/backports.entry_points_selectable/actions/workflows/main.yml/badge.svg
    :target: https://github.com/jaraco/backports.entry_points_selectable/actions?query=workflow%3A%22tests%22
    :alt: tests
 
