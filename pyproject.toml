@@ -59,6 +59,7 @@ type = [
 	"pytest-mypy",
 
 	# local
+	"importlib_metadata",
 ]
 
 

@@ -35,10 +35,10 @@ try:
     from importlib_metadata import distributions, EntryPoint
 except ImportError:
     try:
-        import importlib.metadata as metadata
-        from importlib.metadata import distributions, EntryPoint
+        import importlib.metadata as metadata  # type: ignore[no-redef]
+        from importlib.metadata import distributions, EntryPoint  # type: ignore[assignment]
     except ImportError:
-        from importlib_metadata import (  # type: ignore[import-not-found]
+        from importlib_metadata import (
             distributions,
             EntryPoint,
         )
