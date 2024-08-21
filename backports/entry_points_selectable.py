@@ -21,24 +21,27 @@ import operator
 import functools
 
 try:
-    from itertools import filterfalse  # type: ignore
+    from itertools import filterfalse
 except ImportError:
-    from itertools import ifilterfalse as filterfalse  # type: ignore
+    from itertools import ifilterfalse as filterfalse  # type: ignore[attr-defined, no-redef]
 
 
 try:
     # prefer importlib_metadata if it has EntryPoints
-    import importlib_metadata as metadata  # type: ignore
+    import importlib_metadata as metadata
 
     if not hasattr(metadata, 'EntryPoints'):
         raise ImportError("package without EntryPoints")
-    from importlib_metadata import distributions, EntryPoint  # type: ignore
+    from importlib_metadata import distributions, EntryPoint
 except ImportError:
     try:
-        import importlib.metadata as metadata  # type: ignore
-        from importlib.metadata import distributions, EntryPoint  # type: ignore
+        import importlib.metadata as metadata
+        from importlib.metadata import distributions, EntryPoint
     except ImportError:
-        from importlib_metadata import distributions, EntryPoint  # type: ignore
+        from importlib_metadata import (  # type: ignore[import-not-found]
+            distributions,
+            EntryPoint,
+        )
 
 
 __all__ = ['entry_points']
