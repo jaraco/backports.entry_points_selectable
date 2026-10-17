@@ -14,11 +14,11 @@ on later versions.
 EntryPoint...(...)
 """
 
-import collections
-import textwrap
+import functools
 import itertools
 import operator
-import functools
+import textwrap
+from typing import NamedTuple
 
 try:
     from itertools import filterfalse
@@ -32,15 +32,15 @@ try:
 
     if not hasattr(metadata, 'EntryPoints'):
         raise ImportError("package without EntryPoints")
-    from importlib_metadata import distributions, EntryPoint
+    from importlib_metadata import EntryPoint, distributions
 except ImportError:
     try:
-        import importlib.metadata as metadata  # type: ignore[no-redef]
-        from importlib.metadata import distributions, EntryPoint  # type: ignore[assignment]
+        from importlib import metadata  # type: ignore[no-redef]
+        from importlib.metadata import EntryPoint, distributions  # type: ignore[assignment]
     except ImportError:
         from importlib_metadata import (
-            distributions,
             EntryPoint,
+            distributions,
         )
 
 
@@ -65,7 +65,10 @@ def unique_everseen(iterable, key=None):
                 yield element
 
 
-class Pair(collections.namedtuple('Pair', 'name value')):
+class Pair(NamedTuple):
+    name: str
+    value: str
+
     @classmethod
     def parse(cls, text):
         return cls(*map(str.strip, text.split("=", 1)))
@@ -157,7 +160,7 @@ class EntryPoints(list):
         Get the EntryPoint in self matching name.
         """
         if isinstance(name, int):
-            return super(EntryPoints, self).__getitem__(name)
+            return super().__getitem__(name)
         try:
             return next(iter(self.select(name=name)))
         except StopIteration:
@@ -175,7 +178,7 @@ class EntryPoints(list):
         """
         Return the set of all names of all entry points.
         """
-        return set(ep.name for ep in self)
+        return {ep.name for ep in self}
 
     @property
     def groups(self):
@@ -186,7 +189,7 @@ class EntryPoints(list):
         >>> EntryPoints().groups
         set(...)
         """
-        return set(ep.group for ep in self)
+        return {ep.group for ep in self}
 
     @classmethod
     def _from_text_for(cls, text, dist):
